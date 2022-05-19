@@ -7,7 +7,13 @@ export default function Container(){
 
     //vamos o estado inicial dos produtos, ou seja,
     //quais dados existem dentro do objeto produtos
-
+    const[mensagem, setMensagem] = useState([
+        {
+            titulo: "",
+            autor: "",
+            mensagem: ""
+        },
+    ]);
     const[produtos, setProdutos] = useState([
         {
             id:"",
@@ -20,7 +26,7 @@ export default function Container(){
     ]);
 
     useEffect(()=>{
-        fetch("http://10.26.49.21:4000/api/services/produtos/listar")
+        fetch("http://10.26.49.20:4000/api/services/produtos/listar")
         .then((response)=>response.json())
         .then((dados)=>{
 	    setProdutos(dados.output);
@@ -28,10 +34,14 @@ export default function Container(){
         .catch((erro)=>console.error(`Erro ao carregar a api ->${erro}`))
     },[])
 
+    const mudarDados = (content)=>{
+        setMensagem(content);
+    }
+
     return(
         <div className="container">
-            <Mensagem />
-            <Conteudo dados = {produtos}/>
+            <Mensagem info = {mensagem}/>
+            <Conteudo dados = {produtos} acao = {mudarDados}/>
         </div>
-    )
+    );
 }
